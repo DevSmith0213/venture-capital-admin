@@ -145,7 +145,7 @@ const BannerTable = ({ data, setLoading }: IProps) => {
                   </h5>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-4 dark:border-strokedark">
-                  {item.image && <Image
+                  {item.image &&  item.image != undefined && item.image != "undefined" &&<Image
                     className="object-contain rounded-lg shadow-default"
                     src={item.image}
                     alt="Logo"
