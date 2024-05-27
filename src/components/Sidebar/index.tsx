@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import SidebarLinkGroup from "./SidebarLinkGroup";
-import { AppstoreOutlined, BankOutlined, BookOutlined, SettingOutlined, FundOutlined, SlidersOutlined, HeatMapOutlined, GlobalOutlined, SpotifyOutlined, BoxPlotOutlined, ControlOutlined } from '@ant-design/icons';
+import { TeamOutlined, BankOutlined, BookOutlined, ReconciliationOutlined, FundOutlined, SlidersOutlined, HeatMapOutlined, GlobalOutlined, FilePptOutlined, BoxPlotOutlined, ControlOutlined } from '@ant-design/icons';
 interface SidebarProps {
   sidebarOpen: boolean;
   setSidebarOpen: (arg: boolean) => void;
@@ -111,6 +111,17 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 </Link>
               </li> */}
 
+              <li>
+                <Link
+                  href="/user"
+                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes("user") &&
+                    "bg-graydark dark:bg-meta-4"
+                    }`}
+                >
+                  <TeamOutlined /> User
+                </Link>
+              </li>
+
               <SidebarLinkGroup
                 activeCondition={pathname.includes("venturecapital")}
               >
@@ -196,6 +207,28 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   );
                 }}
               </SidebarLinkGroup>
+
+              <li>
+                <Link
+                  href="/startup"
+                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes("startup") &&
+                    "bg-graydark dark:bg-meta-4"
+                    }`}
+                >
+                  <ReconciliationOutlined /> Startups
+                </Link>
+              </li>
+
+              <li>
+                <Link
+                  href="/pitches"
+                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes("pitches") &&
+                    "bg-graydark dark:bg-meta-4"
+                    }`}
+                >
+                  <FilePptOutlined /> Pitches
+                </Link>
+              </li>
 
               <SidebarLinkGroup
                 activeCondition={pathname.includes("blog")}
