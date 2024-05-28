@@ -6,6 +6,7 @@ import Image from "next/image";
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Spin } from 'antd';
+import { openNotificationWithIcon } from '@/utils/notification'
 
 const SignIn: React.FC = () => {
   const router = useRouter()
@@ -23,10 +24,12 @@ const SignIn: React.FC = () => {
       });
       console.log(res);
       if (res.ok) {
+        openNotificationWithIcon('success', "Login", ``)
         router.push('/venturecapital/vc');
       }
     } catch (error) {
       setLoading(false)
+      openNotificationWithIcon('error', "Login", `Login failed`)
     }
   }
 

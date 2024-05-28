@@ -8,6 +8,7 @@ import { Form, message, Button, Input, Select, Spin } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { uploadFileHandler } from '@/utils/firebaseQuery';
+import { openNotificationWithIcon } from '@/utils/notification'
 
 const { Option } = Select;
 
@@ -31,6 +32,7 @@ const EditFund = ({ route }: any) => {
       } catch (error) {
         setAreasFromServer([]);
         setStagesFromServer([]);
+        openNotificationWithIcon('error', "Stage and Area", `Get data from area and stage failed`)
       }
       setLoading(false);
     }
@@ -49,6 +51,7 @@ const EditFund = ({ route }: any) => {
         form.setFieldsValue(response.data);
       } catch (error) {
         setVcInfo({});
+        openNotificationWithIcon('error', "Fund", `Get fund data failed`)
       }
       setLoading(false)
 
@@ -83,18 +86,21 @@ const EditFund = ({ route }: any) => {
 
       if (!response.ok) {
         console.log("falling over")
+        openNotificationWithIcon('error', "Fund", `Update failed`)
         setLoading(false);
         throw new Error(`response status: ${response.status}`);
       }
 
       await response.json();
       setTimeout(() => {
+        openNotificationWithIcon('success', "Fund", `It has been successfully updated.`)
         setThumbnailFile(null);
         router.push('/venturecapital/vc');
       }, 500);
-
+      
     } catch (error) {
       console.error(error)
+      openNotificationWithIcon('error', "Fund", `Update failed`)
     }
   }
 

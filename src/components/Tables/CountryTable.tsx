@@ -6,6 +6,7 @@ import { ExclamationCircleOutlined, EditOutlined, PlusOutlined } from '@ant-desi
 import { useRouter } from 'next/navigation'
 import { uploadFileHandler } from '@/utils/firebaseQuery';
 import Image from "next/image";
+import { openNotificationWithIcon } from '@/utils/notification'
 const { confirm } = Modal;
 
 interface IProps {
@@ -42,10 +43,12 @@ const BannerTable = ({ data, setLoading }: IProps) => {
           setLoading(true)
           const response = await axios.post("/api/changeBanner", { id, type });
           setLoading(false)
+          openNotificationWithIcon('success', "User", `It has been successfully ${type}d.`)
           router.refresh();
           window.location.reload();
         } catch (error) {
           console.log(error);
+          openNotificationWithIcon('error', "User", `It has been ${type} failed`)
           setLoading(false)
         }
       },
@@ -80,11 +83,13 @@ const BannerTable = ({ data, setLoading }: IProps) => {
       if (!response.ok) {
         console.log("falling over")
         setLoading(false)
+        openNotificationWithIcon('error', "Country", `Create failed`)
         throw new Error(`response status: ${response.status}`);
       }
-
+      
       await response.json();
       setTimeout(() => {
+        openNotificationWithIcon('error', "Country", `It has been create failed`)
         setImageFile(null);
         setLoading(false)
         setImage("")
@@ -96,6 +101,7 @@ const BannerTable = ({ data, setLoading }: IProps) => {
 
     } catch (error) {
       console.log(error);
+      openNotificationWithIcon('error', "Country", `Create failed`)
       setLoading(false)
     }
   }

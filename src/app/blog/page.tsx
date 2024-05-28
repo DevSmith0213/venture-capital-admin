@@ -6,6 +6,7 @@ import { Spin } from 'antd';
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import BlogTable from "@/components/Blog/BlogTable";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
+import { openNotificationWithIcon } from '@/utils/notification'
 
 const BlogsPage = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -22,6 +23,7 @@ const BlogsPage = () => {
         setData(response.data);
       } catch (error) {
         setData([]);
+        openNotificationWithIcon('error', "Blog", `Get blog data failed`)
       }
       setLoading(false);
     }

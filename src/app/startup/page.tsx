@@ -6,6 +6,7 @@ import { Spin } from 'antd';
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import StartupTable from "@/components/Tables/StartupTable";
+import { openNotificationWithIcon } from '@/utils/notification'
 
 const VenturecapitalPage = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -25,6 +26,7 @@ const VenturecapitalPage = () => {
         setData(response.data);
       } catch (error) {
         setData([]);
+        openNotificationWithIcon('error', "Startup", `Get startup data failed`)
       }
       setLoading(false);
     }

@@ -6,6 +6,7 @@ import { Spin } from 'antd';
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import PitchesTable from "@/components/Tables/PitchesTable";
+import { openNotificationWithIcon } from '@/utils/notification'
 
 const PitchesPage = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -25,6 +26,7 @@ const PitchesPage = () => {
         setData(response.data);
       } catch (error) {
         setData([]);
+        openNotificationWithIcon('error', "Pitch", `Get pitch data failed`)
       }
       setLoading(false);
     }

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Button, Modal, Input, Pagination, Tag } from 'antd';
 import { ExclamationCircleOutlined, PlusOutlined, EditOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/navigation'
+import { openNotificationWithIcon } from '@/utils/notification'
 const { confirm } = Modal;
 
 interface IProps {
@@ -29,9 +30,11 @@ const VCTable = ({ route, data, perPage, currentPage, setCurrentPage }: IProps) 
       async onOk() {
         try {
           const response = await axios.post("/api/changeFilter", { route, id, type });
+          openNotificationWithIcon('success', "Fund Data", `It has been successfully ${type}d.`)
           router.refresh();
           window.location.reload();
         } catch (error) {
+          openNotificationWithIcon('error', "Fund Data", `It has been ${type} failed`)
           console.log(error);
         }
       },
@@ -45,9 +48,11 @@ const VCTable = ({ route, data, perPage, currentPage, setCurrentPage }: IProps) 
   const handleCreateItem = async () => {
     try {
       const response = await axios.post("/api/createFilter", { route, title });
-
+      openNotificationWithIcon('success', "Fund Data", `It has been successfully created.`)
+      
       setOpen(false);
     } catch (error) {
+      openNotificationWithIcon('error', "Fund Data", `It has been create failed`)
       console.log(error);
     }
   }

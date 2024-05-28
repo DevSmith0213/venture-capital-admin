@@ -4,8 +4,9 @@ import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { Button, Modal, Input, Pagination, Tag } from 'antd';
-import { DeleteOutlined, PlusOutlined, EditOutlined } from '@ant-design/icons';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/navigation'
+import { openNotificationWithIcon } from '@/utils/notification'
 const { confirm } = Modal;
 
 interface IProps {
@@ -20,35 +21,26 @@ const StartupTable = ({ data, perPage, currentPage, setCurrentPage }: IProps) =>
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
 
-  const handleItem = async (id: any, type: string) => {
-    alert("Developing...")
-    // confirm({
-    //   icon: <ExclamationCircleOutlined />,
-    //   content: <p>Are you really {type} this?</p>,
-    //   okButtonProps: { type: 'default' },
-    //   async onOk() {
-    //     try {
-    //       const response = await axios.post("/api/changeFilter", { id, type });
-    //       router.refresh();
-    //       window.location.reload();
-    //     } catch (error) {
-    //       console.log(error);
-    //     }
-    //   },
-    //   onCancel() {
-    //     console.log('Cancel');
-    //   },
-    // });
-  }
-
-  const handleCreateItem = async () => {
-    try {
-      const response = await axios.post("/api/createFilter", { title });
-
-      setOpen(false);
-    } catch (error) {
-      console.log(error);
-    }
+  const handleItem = async (item: any) => {
+    confirm({
+      icon: <ExclamationCircleOutlined />,
+      content: <p>Are you really {item.isActive ? "disable" : "enable"} this?</p>,
+      okButtonProps: { type: 'default' },
+      async onOk() {
+        try {
+          const response = await axios.post("/api/changeStartup", { id: item._id });
+          openNotificationWithIcon('success', "Startup", `It has been successfully updated.`)
+          router.refresh();
+          window.location.reload();
+        } catch (error) {
+          console.log(error);
+          openNotificationWithIcon('error', "Startup", `It has been update failed`)
+        }
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
+    });
   }
 
   const handlePageChange = (page: any, pageNumber: any) => {
@@ -62,26 +54,13 @@ const StartupTable = ({ data, perPage, currentPage, setCurrentPage }: IProps) =>
           <div className="flex items-center text-black dark:text-white">
             Totoal items: {data.dataLength}
           </div>
-          {/* <Button danger onClick={() => setOpen(true)} className="flex items-center">
-            <PlusOutlined />Create New
-          </Button>
-          <Modal
-            title="Create New"
-            centered
-            open={open}
-            onCancel={() => setOpen(false)}
-            footer={(_: any, { OkBtn, CancelBtn }: any) => (
-              <>
-                <Button className="bg-[#1c2434] text-white" onClick={() => handleCreateItem()} disabled={title == ""}>Create</Button>
-              </>
-            )}
-          >
-            <Input value={title} onChange={(event: any) => setTitle(event.target.value)} placeholder="Please input Title" />
-          </Modal> */}
         </div>
         <table className="w-full table-auto mt-4">
           <thead>
             <tr className="bg-gray-2 text-left dark:bg-meta-4">
+              <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
+                User
+              </th>
               <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
                 Logo
               </th>
@@ -112,6 +91,10 @@ const StartupTable = ({ data, perPage, currentPage, setCurrentPage }: IProps) =>
             {data.infos?.map((item: any) => (
               <tr key={item._id} className="border-b border-[#eee] px-4 py-4 dark:border-strokedark h-[60px]" >
                 <td >
+                  <h5 className="font-medium text-sm text-black dark:text-white">{item.user.name}</h5>
+                  <h5 className="font-medium text-sm text-black dark:text-white">{item.user.email}</h5>
+                </td>
+                <td >
                   {item.logo &&
                     <Image className="object-contain rounded-lg shadow-default"
                       src={item.logo}
@@ -125,7 +108,9 @@ const StartupTable = ({ data, perPage, currentPage, setCurrentPage }: IProps) =>
                   <h5 className="font-medium text-black dark:text-white">{item.name}</h5>
                 </td>
                 <td>
-                  <h5 className="font-medium text-black dark:text-white">{item.website}</h5>
+                  <a href={item.website} target="_blank" className="mb-2 text-sm">
+                    <Tag color="purple" className="mb-1">{item.website}</Tag>
+                  </a>
                 </td>
                 <td >
                   {item.areasList?.map((area: any) => (
@@ -138,7 +123,9 @@ const StartupTable = ({ data, perPage, currentPage, setCurrentPage }: IProps) =>
                   ))}
                 </td>
                 <td >
-                  {item.deckURL}
+                  <a href={item.deckURL} target="_blank" className="mb-2 text-sm">
+                    <Tag color="volcano" className="mb-1">{item.deckURL}</Tag>
+                  </a>
                 </td>
                 <td>
                   <p
@@ -150,15 +137,9 @@ const StartupTable = ({ data, perPage, currentPage, setCurrentPage }: IProps) =>
                 </td>
                 <td>
                   <div className="flex items-center space-x-3.5">
-                    <button className="hover:text-primary" onClick={() => handleItem(item._id, "remove")}>
-                      <EditOutlined />
-                    </button>
                     <button className={`inline-flex rounded-full bg-opacity-10 px-3 py-1 text-sm font-medium ${item.isActive
-                      ? "bg-danger text-danger" : "bg-success text-success"}`} onClick={() => handleItem(item._id, "change")}>
+                      ? "bg-danger text-danger" : "bg-success text-success"}`} onClick={() => handleItem(item)}>
                       {item.isActive ? "Disable" : "Enable"}
-                    </button>
-                    <button className="hover:text-primary" onClick={() => handleItem(item._id, "remove")}>
-                      <DeleteOutlined />
                     </button>
                   </div>
                 </td>

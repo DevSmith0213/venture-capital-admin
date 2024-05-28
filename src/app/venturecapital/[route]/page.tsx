@@ -6,6 +6,7 @@ import { Spin } from 'antd';
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import VCTable from "@/components/Tables/VCTable";
+import { openNotificationWithIcon } from '@/utils/notification'
 
 interface IProps {
   params: {
@@ -32,6 +33,7 @@ const VenturecapitalPage = ({ params }: IProps) => {
         setData(response.data);
       } catch (error) {
         setData([]);
+        openNotificationWithIcon('error', "Fund", `Get fund data failed`)
       }
       setLoading(false);
     }

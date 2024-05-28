@@ -6,6 +6,7 @@ import { Spin } from 'antd';
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import CountryTable from "@/components/Tables/CountryTable";
+import { openNotificationWithIcon } from '@/utils/notification'
 
 const VenturecapitalPage = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -19,6 +20,7 @@ const VenturecapitalPage = () => {
         setData(response.data);
       } catch (error) {
         setData([]);
+        openNotificationWithIcon('error', "Country", `Get country data failed`)
       }
       setLoading(false);
     }

@@ -2,9 +2,10 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Link from "next/link";
-import { Button, Modal, Input, Pagination, Tag } from 'antd';
+import { Modal, Input, Pagination, Tag } from 'antd';
 import { ExclamationCircleOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/navigation'
+import { openNotificationWithIcon } from '@/utils/notification'
 const { confirm } = Modal;
 
 interface IProps {
@@ -18,24 +19,24 @@ const UserTable = ({ data, perPage, currentPage, setCurrentPage }: IProps) => {
   const router = useRouter();
 
   const handleItem = async (id: any, type: string) => {
-    alert("Developing...")
-    // confirm({
-    //   icon: <ExclamationCircleOutlined />,
-    //   content: <p>Are you really {type} this?</p>,
-    //   okButtonProps: { type: 'default' },
-    //   async onOk() {
-    //     try {
-    //       const response = await axios.post("/api/changeFilter", { id, type });
-    //       router.refresh();
-    //       window.location.reload();
-    //     } catch (error) {
-    //       console.log(error);
-    //     }
-    //   },
-    //   onCancel() {
-    //     console.log('Cancel');
-    //   },
-    // });
+    confirm({
+      icon: <ExclamationCircleOutlined />,
+      content: <p>Are you really {type} this?</p>,
+      okButtonProps: { type: 'default' },
+      async onOk() {
+        try {
+          await axios.post("/api/changeUser", { id, type });
+          openNotificationWithIcon('success', "User", `It has been successfully ${type}d.`)
+          router.refresh();
+          window.location.reload();
+        } catch (error) {
+          openNotificationWithIcon('error', "User", `It has been ${type} failed`)
+        }
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
+    });
   }
 
   const handlePageChange = (page: any, pageNumber: any) => {
@@ -98,7 +99,7 @@ const UserTable = ({ data, perPage, currentPage, setCurrentPage }: IProps) => {
                 </td>
                 <td>
                   <div className="flex items-center space-x-3.5">
-                    <button className="hover:text-primary" onClick={() => handleItem(item._id, "remove")}>
+                    <button className="hover:text-primary" onClick={() => handleItem(item._id, "edit")}>
                       <EditOutlined />
                     </button>
                     <button className={`inline-flex rounded-full bg-opacity-10 px-3 py-1 text-sm font-medium ${item.isActive
