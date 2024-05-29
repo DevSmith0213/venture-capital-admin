@@ -6,7 +6,10 @@ const startupSchema = new mongoose.Schema(
     oneDescription: String,
     logo: String,
     website: String,
-    social: String,
+    x: String,
+    facebook: String,
+    instagram: String,
+    linkedin: String,
     stageList: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Stage'
