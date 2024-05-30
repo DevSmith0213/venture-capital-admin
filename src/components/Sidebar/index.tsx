@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import SidebarLinkGroup from "./SidebarLinkGroup";
-import { TeamOutlined, BankOutlined, BookOutlined, ReconciliationOutlined, FundOutlined, SlidersOutlined, HeatMapOutlined, GlobalOutlined, FilePptOutlined, BoxPlotOutlined, ControlOutlined } from '@ant-design/icons';
+import { TeamOutlined, BankOutlined, BookOutlined, ReconciliationOutlined, FundOutlined, SlidersOutlined, HeatMapOutlined, GlobalOutlined, FilePptOutlined, BoxPlotOutlined, ControlOutlined, MailOutlined } from '@ant-design/icons';
 interface SidebarProps {
   sidebarOpen: boolean;
   setSidebarOpen: (arg: boolean) => void;
@@ -335,6 +335,17 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     }`}
                 >
                   <ControlOutlined />Banners
+                </Link>
+              </li>
+
+              <li>
+                <Link
+                  href="/newsletter"
+                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes("newsletter") &&
+                    "bg-graydark dark:bg-meta-4"
+                    }`}
+                >
+                  <MailOutlined />Newsletter
                 </Link>
               </li>
 

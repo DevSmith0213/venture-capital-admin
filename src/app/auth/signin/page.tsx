@@ -24,9 +24,10 @@ const SignIn: React.FC = () => {
       });
       console.log(res);
       if (res.ok) {
-        openNotificationWithIcon('success', "Login", ``)
+        openNotificationWithIcon('success', "Login", `Login Successfully`)
         router.push('/venturecapital/vc');
       }
+      setLoading(false)
     } catch (error) {
       setLoading(false)
       openNotificationWithIcon('error', "Login", `Login failed`)
