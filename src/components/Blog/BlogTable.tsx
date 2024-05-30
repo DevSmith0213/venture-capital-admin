@@ -68,6 +68,9 @@ const BlogTable = ({ data, perPage, currentPage, setCurrentPage }: IProps) => {
                 Tags
               </th>
               <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
+                Fund
+              </th>
+              <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
                 Status
               </th>
               <th className="px-4 py-4 font-medium text-black dark:text-white">
@@ -94,12 +97,19 @@ const BlogTable = ({ data, perPage, currentPage, setCurrentPage }: IProps) => {
                   }
                 </td>
                 <td className="border-b border-[#eee] px-4 py-4 dark:border-strokedark">
-                  <Tag key={item.category?._id} color="magenta" className="mb-1">{item.category?.title}</Tag>
+                  <Tag color="magenta" className="mb-1">{item.category?.title}</Tag>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-4 dark:border-strokedark">
                   {item.tags?.map((tag: any) => (
                     <Tag key={tag._id} color="blue" className="mb-1">{tag?.title}</Tag>
                   ))}
+                </td>
+                <td className="border-b border-[#eee] px-4 py-4 dark:border-strokedark">
+                  {item.fund_id?.logo && <Image
+                    className="object-contain rounded-lg shadow-default"
+                    src={item.fund_id?.logo} alt="Logo" width={50} height={50} />
+                  }
+                  <Tag color="orange" className="mb-1">{item.fund_id?.title}</Tag>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p

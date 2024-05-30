@@ -20,6 +20,7 @@ const CreateBlog = ({ route }: any) => {
   const [type, setType] = useState("");
   const [id, setId] = useState("");
   const [blogInfo, setBlogInfo] = useState<any>({});
+  const [fundsFromServer, setFundsFromServer] = useState<any>([]);
   const [tagsFromServer, setTagsFromServer] = useState<any>([]);
   const [categoryFromServer, setCategoryFromServer] = useState<any>([]);
   const [uploadedImages, setUploadedImages] = useState<any>([]);
@@ -71,29 +72,24 @@ const CreateBlog = ({ route }: any) => {
       setLoading(true);
       try {
         const response = await axios.get("/api/getBlogFilterLists");
+        setFundsFromServer(response.data.funds);
         setTagsFromServer(response.data.tags);
         setCategoryFromServer(response.data.categories);
       } catch (error) {
         setTagsFromServer([]);
         setCategoryFromServer([]);
       }
-      setLoading(false);
-    }
-    fetch()
-  }, []);
 
-  useEffect(() => {
-    const fetch = async () => {
       if (route.includes("edit")) {
         setType("edit");
         var bID = route.replace("edit_", "")
         setId(bID);
-        setLoading(true);
         try {
           const response = await axios.post("/api/getBlog", { id: bID });
           var result = response.data
           result.tags = response.data.tags.map((tag: any) => tag._id)
           result.category = response.data.category._id
+          result.fund_id = response.data.fund_id._id
           setBlogInfo(result);
           var setFormData = result
           const blocksFromHtml = htmlToDraft(result.content);
@@ -109,11 +105,11 @@ const CreateBlog = ({ route }: any) => {
           console.log("==============", error);
           setBlogInfo({});
         }
-        setLoading(false);
       } else {
         setType("create");
         setId("");
       }
+      setLoading(false);
     }
     fetch()
   }, [form, route]);
@@ -136,6 +132,7 @@ const CreateBlog = ({ route }: any) => {
       formData.append('tags', blogInfo.tags)
       formData.append('category', blogInfo.category)
       formData.append('content', cont)
+      formData.append('fund_id', blogInfo.fund_id)
       formData.append('type', type)
       formData.append('id', id)
 
@@ -168,6 +165,11 @@ const CreateBlog = ({ route }: any) => {
   const handleThumbnailChange = (e: any) => {
     setThumbnailFile(e.target.files[0]);
   };
+
+  const handleFundChange = (fund_id: any) => {
+    console.log(fund_id)
+    setBlogInfo({ ...blogInfo, ['fund_id']: fund_id });
+  }
 
   const handleTagsChange = (tag: any) => {
     setBlogInfo({ ...blogInfo, ['tags']: tag });
@@ -207,7 +209,7 @@ const CreateBlog = ({ route }: any) => {
                 label={<span className="text-black dark:text-white">Paragraph</span>}
                 rules={[{ required: true }]}
               >
-                <Input.TextArea allowClear showCount value={blogInfo.paragraph ? blogInfo.paragraph : ""} onChange={handleChange('paragraph')} placeholder="Please input paragraph" />
+                <Input.TextArea allowClear value={blogInfo.paragraph ? blogInfo.paragraph : ""} onChange={handleChange('paragraph')} placeholder="Please input paragraph" />
               </Form.Item>
               <Form.Item
                 name="thumbnail"
@@ -222,6 +224,18 @@ const CreateBlog = ({ route }: any) => {
                 />
                 {thumbnailFile && <img className="rounded-lg w-[150px] h-[150px] object-contain p-2 bg-white" src={URL.createObjectURL(thumbnailFile)} alt={blogInfo?.route} />}
                 {!thumbnailFile && blogInfo?.imageSrc != "null" && <img className="rounded-lg w-[150px] h-[150px] object-contain p-2 bg-white" src={blogInfo?.imageSrc} alt={blogInfo?.route} />}
+              </Form.Item>
+              <Form.Item
+                name="fund_id"
+                hasFeedback
+                label={<span className="text-black dark:text-white">Fund</span>}
+                rules={[{ required: true, message: 'Please select fund!', type: 'string' }]}
+              >
+                <Select placeholder="Please select fund" value={blogInfo.fund_id} onChange={handleFundChange}>
+                  {fundsFromServer.map((tag: any) => (
+                    <Option key={tag._id} value={tag._id}>{tag.title}</Option>
+                  ))}
+                </Select>
               </Form.Item>
               <Form.Item
                 name="category"

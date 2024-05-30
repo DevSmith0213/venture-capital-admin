@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { NextResponse } from 'next/server'
 import Category from "../../../utils/models/category";
+import Fund from "../../../utils/models/fund";
 import Tag from "../../../utils/models/tag";
 import Media from "../../../utils/models/media";
 import { connectMongoDB } from "../../../utils/mongodb";
@@ -20,6 +21,11 @@ export async function POST(req) {
                 {
                     path: "tags",
                     model: Tag,
+                    options: { strictPopulate: false },
+                },
+                {
+                    path: "fund_id",
+                    model: Fund,
                     options: { strictPopulate: false },
                 }
             ]);
